@@ -1,0 +1,10 @@
+body {
+    margin: 0;
+    font-family: "Fjalla One", sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box
+}
