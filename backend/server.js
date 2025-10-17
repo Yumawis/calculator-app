@@ -19,13 +19,13 @@ app.use(
 app.use(express.json()) // 📦 Allows receiving JSON in requests
 
 // 🛣️ Main Routes
-app.use("/api/calculator", calculatorRoutes)
+app.use("/api/v1/calculator", calculatorRoutes)
 
 // ⚙️ Start the server
 app.listen(appConfig.port, () => {
   console.log("========================================")
   console.log("🟢 Servidor iniciado correctamente")
-  console.log(`🌐 URL base: "http://localhost:${appConfig.port}`)
+  console.log(`🌐 URL base: http://localhost:${appConfig.port}`)
   console.log("⚙️ Configuración:")
   console.log(`     - CORS permitido: ${appConfig.allowedCORS.join(", ")}`)
   console.log("========================================\n")
