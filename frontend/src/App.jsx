@@ -1,10 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setNum1,
-  setNum2,
-  setSelectedOperation,
-  setResult,
-} from "./features/calculatorSlice";
+import { selectResult, setResult } from "./slices/calculateSlice";
 import CalculatorContainer from "./components/containers/CalculatorContainer";
 import CustomIconButton from "./components/buttons/CustomIconButton";
 import { FaDivide, FaMinus, FaPlus, FaTimes } from "react-icons/fa";
