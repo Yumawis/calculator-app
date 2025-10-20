@@ -19,7 +19,7 @@ const ResultBox = ({ result }) => {
           width: "100%",
           display: "flex",
           padding: "8px 0",
-          background: "#9be6a5",
+          background: "#92E495",
           borderRadius: "5px",
           justifyContent: "center",
         }}

@@ -1,17 +1,16 @@
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectResult, setResult } from "./slices/calculateSlice";
-import CalculatorContainer from "./components/containers/CalculatorContainer";
+
+import { useCalculateMutation } from "./services/calculateApi";
+
+import { selectResult, setResult } from "./slices/calculateSlices";
+
+import CalculatorContainer from "./containers/CalculatorContainer";
 import CustomIconButton from "./components/buttons/CustomIconButton";
 import { FaDivide, FaMinus, FaPlus, FaTimes } from "react-icons/fa";
 import CustomNumberInput from "./components/inputs/CustomNumberInput";
-import CustomTextButton from "./components/buttons/CustomTextButton";
+import CustomButon from "./components/buttons/CustomButton";
 import ResultBox from "./components/result/ResultBox";
-import {
-  useAddOperationMutation,
-  useSubtractOperationMutation,
-  useMultiplyOperationMutation,
-  useDivideOperationMutation,
-} from "./services/calculatorApi";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -119,7 +118,7 @@ const App = () => {
       </div>
 
       {/* Boton de calcular */}
-      <CustomTextButton
+      <CustomButton
         customBackgroundColor={"#43A047"}
         hoveredBackgroundColor="#337C36"
         customColor={"#fff"}
