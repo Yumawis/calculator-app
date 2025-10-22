@@ -10,10 +10,10 @@ const StyledIconButton = styled(IconButton, {
   justifyContent: "center",
   alignItems: "center",
   background: active ? colors.activeBackgroundIcon : colors.accent,
-  padding: "1.4em",
+  padding: "0.8em",
   borderRadius: "8px",
   border: active
-    ? `2px solid ${colors.borderIconActive}`
+    ? `1.5px solid ${colors.borderIconActive}`
     : `1.5px solid ${colors.borderBox}`,
   cursor: "pointer",
   transition: "all 0.3s ease",
@@ -23,9 +23,9 @@ const StyledIconButton = styled(IconButton, {
     backgroundColor: colors.hoverIcon,
   },
 
-  "&:svg": {
+  "& svg": {
     transition: "transform 0.3s ease, fill 0.3s ease",
-    fill: active ? colors.textSecondary : colors.textTertiary,
+    fill: active ? colors.textPrimary : colors.textTertiary,
   },
 }));
 
@@ -38,33 +38,3 @@ const CustomIconButton = ({ icon, active = false, ...props }) => {
 };
 
 export default CustomIconButton;
-
-// }) => {
-//   const [isHovered, setIsHovered] = useState(false);
-
-//   return (
-//     <button
-//       style={{
-//         display: "flex",
-//         padding: "9px 15px",
-//         alignItems: "center",
-//         backgroundColor: isSelected
-//           ? hoveredBackgroundColor
-//           : isHovered
-//           ? hoveredBackgroundColor
-//           : customBackgroundColor,
-//         color: customColor,
-//         border: `1.5px solid ${isSelected ? "#388E3C" : customBorderColor}`,
-//         borderRadius: "6px",
-//         cursor: "pointer",
-//         fontSize: "16px",
-//         transition: "all 0.3s ease",
-//       }}
-//       onMouseEnter={() => setIsHovered(true)}
-//       onMouseLeave={() => setIsHovered(false)}
-//       onClick={onClick}
-//     >
-//       {customIcon}
-//     </button>
-//   );
-// };

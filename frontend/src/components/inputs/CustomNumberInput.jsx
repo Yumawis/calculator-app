@@ -1,28 +1,38 @@
-import React, { useState } from "react";
+import { Input, styled } from "@mui/material";
 
-const CustomNumberInput = ({ customPlaceholder, value, onChange }) => {
-  const [isFocused, setIsFocused] = useState(false);
-  return (
-    <input
-      type="number"
-      placeholder={customPlaceholder}
-      value={value}
-      onChange={onChange}
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
-      style={{
-        backgroundColor: "#FAFAFA",
-        width: "100%",
-        padding: "14.5px 0",
-        border: isFocused ? "2px solid #A5D6A7" : "2px solid #CCCCCC",
-        borderRadius: "8px",
-        textAlign: "center",
-        outline: "none",
-        boxShadow: isFocused ? "0 0 4px rgba(74, 144, 226, 0.5)" : "none",
-        transition: "all 0.2s ease-in-out",
-      }}
-    />
-  );
+import colors from "../../theme/colors";
+
+const StyledInput = styled(Input)(() => ({
+  width: "100%",
+  border: "none",
+  borderRadius: "1rem",
+  backgroundColor: colors.secondary,
+  transition: "all 0.3s ease",
+
+  "&:before, &:after": {
+    display: "none",
+  },
+
+  "& .MuiInput-input": {
+    borderRadius: "1rem",
+    padding: "1rem",
+    transition: "all 0.3s ease",
+    border: `2px solid ${colors.border}`,
+    textAlign: "center",
+    fontFamily: "'Fjalla One', system-ui",
+    fontWeight: 400,
+    fontStyle: "normal",
+    color: colors.textPrimary,
+  },
+
+  "& .MuiInput-input:focus": {
+    border: `2px solid ${colors.borderInputActive}`,
+    backgroundColor: colors.secondary,
+  },
+}));
+
+const CustomNumberInput = (props) => {
+  return <StyledInput type="number" {...props} />;
 };
 
 export default CustomNumberInput;

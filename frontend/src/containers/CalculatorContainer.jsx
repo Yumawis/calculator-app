@@ -1,33 +1,23 @@
-const CalculatorContainer = ({ children }) => {
+import { Box } from "@mui/material";
+
+import colors from "../theme/colors";
+
+const CalculatorContainer = ({ children, sx = {} }) => {
   return (
-    <div
-      style={{
-        width: "100vw",
+    <Box
+      sx={{
+        width: "100%",
         height: "100vh",
         display: "flex",
-        justifyContent: "center",
+        flexDirection: "column",
         alignItems: "center",
-        backgroundColor: "#E3E2E2",
+        justifyContent: "center",
+        backgroundColor: colors.secondary,
+        ...sx,
       }}
     >
-      <div
-        style={{
-          width: "320px",
-          display: "flex",
-          flexDirection: "column",
-          padding: "20px",
-          alignItems: "center",
-          backgroundColor: "white",
-          borderRadius: "16px",
-          borderColor: "#E0E0E0",
-          textAlign: "center",
-          boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
-          gap: "16px",
-        }}
-      >
-        {children}
-      </div>
-    </div>
+      {children}
+    </Box>
   );
 };
 

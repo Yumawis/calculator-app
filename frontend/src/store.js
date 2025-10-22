@@ -3,6 +3,8 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 
 import { calculatorApi } from "./api/calculatorApi";
 
+import calculateReducer from "./slices/calculateSlices"
+
 const appReducer = combineReducers({
     [calculatorApi.reducerPath]: calculatorApi.reducer,
     calculate: calculateReducer

@@ -2,24 +2,25 @@ import { Box } from "@mui/material";
 
 import colors from "../../theme/colors";
 
-const CustomFlexCard = ({ children }) => {
+const CustomFlexCard = ({ children, sx }) => {
   return (
     <Box
       sx={{
         width: "100%",
+        minHeight: "550px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         padding: "25px",
         gap: "25px",
+        border: `2px solid ${colors.border}`,
         borderRadius: "1rem",
         background: colors.secondary,
-        boxShadow: `25px 25px 50px ${colors.shadowDark}, -25px -25px 50px ${colors.shadowLight}`,
         ...sx,
       }}
     >
-      {Children}
+      {children}
     </Box>
   );
 };
