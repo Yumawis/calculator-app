@@ -1,139 +1,176 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import { useCalculateMutation } from "./services/calculateApi";
+
+import { selectResult, setResult } from "./slices/calculateSlices";
+
+import { Box } from "@mui/material";
+
+import { ErrorMessage, Field, Form, Formik } from "formik";
+
+import { calculatorSchema } from "./utils/validationSchema";
+
 import {
-  setNum1,
-  setNum2,
-  setSelectedOperation,
-  setResult,
-} from "./features/calculatorSlice";
-import CalculatorContainer from "./components/containers/CalculatorContainer";
+  FormErrorMessage,
+  H3,
+  H4,
+  H6,
+} from "./components/text/CustomTypography";
+
+import colors from "./theme/colors";
+
+import CalculatorContainer from "./containers/CalculatorContainer";
+import CustomFlexCard from "./components/cards/CustomFlexCard";
+import CustomButton from "./components/buttons/CustomButton";
 import CustomIconButton from "./components/buttons/CustomIconButton";
-import { FaDivide, FaMinus, FaPlus, FaTimes } from "react-icons/fa";
 import CustomNumberInput from "./components/inputs/CustomNumberInput";
-import CustomTextButton from "./components/buttons/CustomTextButton";
-import ResultBox from "./components/result/ResultBox";
-import {
-  useAddOperationMutation,
-  useSubtractOperationMutation,
-  useMultiplyOperationMutation,
-  useDivideOperationMutation,
-} from "./services/calculatorApi";
+import FormFlexBox from "./components/form/FormFlexBox";
+import ResultBox from "./components/cards/ResultBoxCard";
+
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import CloseIcon from "@mui/icons-material/Close";
+import DivideIcon from "./components/icons/DivideIcon";
 
 const App = () => {
   const dispatch = useDispatch();
 
-  // Estado global
-  const { num1, num2, selectedOperation, result } = useSelector(
-    (state) => state.calculator
-  );
+  const result = useSelector(selectResult);
 
-  // Mutaciones RTK Query
-  const [addOperation] = useAddOperationMutation();
-  const [subtractOperation] = useSubtractOperationMutation();
-  const [multiplyOperation] = useMultiplyOperationMutation();
-  const [divideOperation] = useDivideOperationMutation();
+  const [
+    calculate,
+    {
+      data: calculateData,
+      isSuccess: isSuccessCalculate,
+      error: calculateError,
+      isError: isErrorCalculate,
+    },
+  ] = useCalculateMutation();
 
-  // Mapeo de operaciones
-  const operationsMap = {
-    add: addOperation,
-    subtract: subtractOperation,
-    multiply: multiplyOperation,
-    divide: divideOperation,
-  };
+  const operationList = [
+    { icon: AddIcon, value: "add" },
+    { icon: RemoveIcon, value: "subtract" },
+    { icon: CloseIcon, value: "multiply" },
+    { icon: DivideIcon, value: "divide" },
+  ];
 
   // Manejo de cálculo
-  const handleCalculator = async () => {
-    const n1 = Number(num1);
-    const n2 = Number(num2);
-
-    if (!selectedOperation) return alert("Seleccione una operación");
-
-    const operation = operationsMap[selectedOperation];
-
-    if (!operation) return alert("Operación no válida");
-
-    const { data } = await operation({ num1: n1, num2: n2 });
-
-    if (data?.result !== undefined) {
-      dispatch(setResult(data.result));
-    } else {
-      dispatch(setResult("Error en el cálculo"));
-    }
+  const handleCalculate = (values) => {
+    const body = { operation: values.operation, numbers: values };
+    calculate(body);
   };
+
+  useEffect(() => {
+    if (isSuccessCalculate) dispatch(setResult(calculateData));
+  }, [isSuccessCalculate]);
+
+  useEffect(() => {
+    if (isErrorCalculate) alert(calculateError?.data?.error);
+  }, [isErrorCalculate]);
 
   return (
     <CalculatorContainer>
-      <h1>Calculadora</h1>
-
-      {/* Inputs */}
-      <CustomNumberInput
-        customPlaceholder={"Number 1"}
-        value={num1}
-        onChange={(e) => dispatch(setNum1(e.target.value))}
-      />
-      <CustomNumberInput
-        customPlaceholder={"Number 2"}
-        value={num2}
-        onChange={(e) => dispatch(setNum2(e.target.value))}
-      />
-
-      {/* Botones de operaciones */}
-      <div
-        style={{
+      <Box
+        sx={{
+          width: "400px",
           display: "flex",
-          width: "100%",
-          justifyContent: "space-between",
+          flexDirection: "column",
+          gap: "45px",
         }}
       >
-        <CustomIconButton
-          customBackgroundColor="#E8F5E9"
-          hoveredBackgroundColor="#92E495"
-          customColor="#2E7D32"
-          customIcon={<FaPlus size={24} />}
-          customBorderColor={"#A5D6A7"}
-          isSelected={selectedOperation === "add"}
-          onClick={() => dispatch(setSelectedOperation("add"))}
-        />
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: "35px",
+          }}
+        >
+          <Formik
+            initialValues={{ num1: "", num2: "", operation: "" }}
+            validationSchema={calculatorSchema}
+            onSubmit={(values) => handleCalculate(values)}
+          >
+            {({ values, handleChange, handleBlur, setFieldValue }) => (
+              <Form>
+                <CustomFlexCard>
+                  <H3>CALCULATOR</H3>
+                  <FormFlexBox>
+                    <Field
+                      as={CustomNumberInput}
+                      id="num1"
+                      name="num1"
+                      placeholder="Ingrese el número 1"
+                      value={values.num1}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
 
-        <CustomIconButton
-          customBackgroundColor="#E8F5E9"
-          hoveredBackgroundColor="#92E495"
-          customColor="#2E7D32"
-          customIcon={<FaMinus size={24} />}
-          customBorderColor={"#A5D6A7"}
-          isSelected={selectedOperation === "subtract"}
-          onClick={() => dispatch(setSelectedOperation("subtract"))}
-        />
-        <CustomIconButton
-          customBackgroundColor="#E8F5E9"
-          hoveredBackgroundColor="#92E495"
-          customColor="#2E7D32"
-          customIcon={<FaTimes size={24} />}
-          customBorderColor={"#A5D6A7"}
-          isSelected={selectedOperation === "multiply"}
-          onClick={() => dispatch(setSelectedOperation("multiply"))}
-        />
-        <CustomIconButton
-          customBackgroundColor="#E8F5E9"
-          hoveredBackgroundColor="#92E495"
-          customColor="#2E7D32"
-          customIcon={<FaDivide size={24} />}
-          customBorderColor={"#A5D6A7"}
-          isSelected={selectedOperation === "divide"}
-          onClick={() => dispatch(setSelectedOperation("divide"))}
-        />
-      </div>
+                    <ErrorMessage name="num1" component={FormErrorMessage} />
+                  </FormFlexBox>
 
-      {/* Boton de calcular */}
-      <CustomTextButton
-        customBackgroundColor={"#43A047"}
-        hoveredBackgroundColor="#337C36"
-        customColor={"#fff"}
-        customText={"CALCULAR"}
-        handleOnClick={handleCalculator}
-      />
+                  <FormFlexBox>
+                    <Field
+                      as={CustomNumberInput}
+                      id="num2"
+                      name="num2"
+                      placeholder="Ingrese el número 2"
+                      value={values.num2}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
 
-      {/* Resultado */}
-      <ResultBox result={result} />
+                    <ErrorMessage name="num2" component={FormErrorMessage} />
+                  </FormFlexBox>
+
+                  <FormFlexBox>
+                    <Box sx={{ width: "100%", display: "flex", gap: "25px" }}>
+                      {operationList.map(({ icon: Icon, value }, index) => (
+                        <CustomIconButton
+                          key={index}
+                          icon={
+                            <Icon
+                              color={
+                                values.operation === "divide"
+                                  ? colors.textPrimary
+                                  : colors.textTertiary
+                              }
+                            />
+                          }
+                          onClick={() => setFieldValue("operation", value)}
+                          active={values.operation === value}
+                        />
+                      ))}
+                    </Box>
+
+                    <ErrorMessage
+                      name="operation"
+                      component={FormErrorMessage}
+                    />
+                  </FormFlexBox>
+
+                  <CustomButton type="submit">CALCULAR</CustomButton>
+
+                  <ResultBox>
+                    <H6>RESULTADO</H6>
+                    <Box
+                      sx={{
+                        backgroundColor: colors.tertiary,
+                        borderRadius: "0.5rem",
+                        padding: "0.5em 1em",
+                        textAlign: "center",
+                      }}
+                    >
+                      <H4>{result}</H4>
+                    </Box>
+                  </ResultBox>
+                </CustomFlexCard>
+              </Form>
+            )}
+          </Formik>
+        </Box>
+      </Box>
     </CalculatorContainer>
   );
 };
