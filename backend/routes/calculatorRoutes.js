@@ -2,24 +2,22 @@ const express = require("express")
 const router = express.Router()
 const calculatorController = require("../controllers/CalculatorController.js")
 
-//➕ Addition
-router.post("/add", async (request, response) => {
-    return calculatorController.add(request, response)
+// Middleware to log every incoming request
+router.use((req, res, next) => {
+    console.log(`\n📥 Nueva petición: ${req.method} ${req.originalUrl} [${new Date().toISOString()}]`)
+    next()
 })
+
+//➕ Addition
+router.post("/add", calculatorController.addNumbers)
 
 // ➖ Subtract
-router.post("/subtract", async (request, response) => {
-    return calculatorController.subtract(request, response)
-})
+router.post("/subtract", calculatorController.subtractNumbers)
 
 // ✖ Multiply
-router.post("/multiply", async (request, response) => {
-    return calculatorController.multiply(request, response)
-})
+router.post("/multiply", calculatorController.multiplyNumbers)
 
 // ➗ Divide
-router.post("/divide", async (request, response) => {
-    return calculatorController.divide(request, response)
-})
+router.post("/divide", calculatorController.divideNumbers)
 
 module.exports = router

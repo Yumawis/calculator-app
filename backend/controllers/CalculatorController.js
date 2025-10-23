@@ -1,89 +1,103 @@
 const calculatorValidator = require("../validators/calculatorValidator.js")
 
-//➕ Addition
-const add = (request, response) => {
+//➕ Addition function
+const addNumbers = (req, res) => {
     try {
-        let data = request.body
-        let num1 = data.num1
-        let num2 = data.num2
+        const { num1, num2 } = req.body
+        console.log("🧮 Ejecutando operación: Suma", { num1, num2 })
 
         let validatorResult = calculatorValidator.validateIntegers(num1, num2)
         let resultNumber = validatorResult.num1 + validatorResult.num2
         
-        return response.status(200).json({
+        const response = { 
             data: {
-                message: 'Resultado operado exitosamente', 
+                message: 'Suma realizada correctamente', 
                 result: resultNumber
             }
-        })
+        }
+
+        console.log("✅ Respuesta enviada", response)
+        return res.status(200).json(response)
     } catch (error) {
-        return response.status(400).json({
+        const errorMessage = error.message
+        console.error("❌ Error en suma:", errorMessage)
+
+        return res.status(422).json({
             data: {
-                message: 'Ocurrió un error al operar el resultado',
-                error: error.message
+                message: 'Ocurrió un error al procesar la operación',
+                error: errorMessage
             }
         })
     }
 }
 
-// ➖ Subtract
-const subtract = (request, response) => {
+// ➖ Subtract function
+const subtractNumbers = (req, res) => {
     try {
-        let data = request.body
-        let num1 = data.num1
-        let num2 = data.num2
+        const { num1, num2 } = req.body
+        console.log("🧮 Ejecutando operación: Resta", { num1, num2 })
 
         let validatorResult = calculatorValidator.validateIntegers(num1, num2)
         let resultNumber = validatorResult.num1 - validatorResult.num2
         
-        return response.status(200).json({
+        const response = {
             data: {
-                message: 'Operación realizada correctamente', 
+                message: 'Resta realizada correctamente', 
                 result: resultNumber
             }
-        }) 
+        }
+
+        console.log("✅ Respuesta enviada:", response)
+        return res.status(200).json(response)
     } catch (error) {
-        return response.status(400).json({
+        const errorMessage = error.message
+        console.error("❌ Error en resta:", errorMessage)
+
+        return res.status(422).json({
             data: {
-                message: 'Ocurrió un error al realizar la operación',
-                error: error.message
+                message: 'Ocurrió un error al procesar la operación',
+                error: errorMessage
             }
         })
     }
 }
 
-// ✖ Multiply
-const multiply = (request, response) => {
+// ✖ Multiply function
+const multiplyNumbers = (req, res) => {
     try {
-        let data = request.body
-        let num1 = data.num1
-        let num2 = data.num2
+        const { num1, num2 } = req.body
+        console.log("🧮 Ejecutando operación: Multiplicación", {num1, num2})
 
         let validatorResult = calculatorValidator.validateIntegers(num1, num2)
         let resultNumber = validatorResult.num1 * validatorResult.num2
         
-        return response.status(200).json({
+        const response = {
             data: {
-                    message: 'El resultado se obtuvo sin problemas',
-                    result: resultNumber
-                }
-            })
+                message: "Multiplicación realizada correctamente",
+                result: resultNumber
+            }
+        }
+
+        console.log("✅ Respuesta enviada:", response)
+        return res.status(200).json(response)
     } catch (error) {
-        return response.status(400).json({
+        const errorMessage = error.message
+        console.log("❌ Error en multiplicación:", errorMessage)
+
+        return res.status(422).json({
             data: {
-                message: 'La operación no se realizó correctamente',
-                error: error.message
+                message: 'Ocurrió un error al procesar la operación',
+                error: errorMessage
             }
         })
     }
 }
 
-// ➗ Divide
-const divide = (request, response) => {
+// ➗ Divide function
+const divideNumbers = (req, res) => {
     try {
-        let data = request.body
-        let num1 = data.num1
-        let num2 = data.num2
+        const { num1, num2 } = req.body
+        console.log("🧮 Ejecutando operación: División", { num1, num2 }) 
 
         let validatorResult = calculatorValidator.validateIntegers(num1, num2)
 
@@ -91,20 +105,26 @@ const divide = (request, response) => {
         
         let resultNumber = validatorResult.num1 / validatorResult.num2
         
-        return response.status(200).json({
+        const response ={
             data: {
                 message: 'Cálculo hecho correctamente', 
                 result: resultNumber
-        } 
-    })
+            } 
+        }
+
+        console.log("✅ Respuesta enviada:", response)
+        return res.status(200).json(response)
     } catch (error) {
-        return response.status(400).json({
+        const errorMessage = error.message
+        console.error("❌ Error en división:", errorMessage)
+
+        return res.status(422).json({
             data: {
                 message: 'Ocurrió un error al realizar el cálculo',
-                error: error.message
+                error: errorMessage
             }
         })
     }
 }
 
-module.exports = { add, subtract, multiply, divide }
+module.exports = { addNumbers, subtractNumbers, multiplyNumbers, divideNumbers }

@@ -1,13 +1,24 @@
-const validateIntegers = (num1, num2) => {
-  // Intenta convertir a número
-  const n1 = Number(num1)
-  const n2 = Number(num2)
+// ✅ Validates that the entered values ​​are valid integers
 
-  // Verifica que ambos sean números enteros
-  if (!Number.isInteger(n1) || !Number.isInteger(n2)) {
-    throw new Error("Los valores deben ser números enteros")
-  }
-  return { num1: n1, num2: n2 }
+const validateIntegers = (num1, num2) => {
+  const values = [num1, num2]
+
+  // 🚫 Validate empty or undefined fields
+  const hasEmptyValue = values.some(
+    (value) => value === undefined || value === null || value === ""
+  )
+
+  if (hasEmptyValue) throw new Error("Los valores (num1 y num2) son requeridos y no pueden estar vacíos") 
+  
+  // 🔢 Convert and validate numeric type
+  const parsedValues = values.map((value) => Number (value))
+
+  if (parsedValues.some((n) => Number.isNaN(n))) throw new Error("Los valores deben ser numéricos")
+
+  // 🧮 Validate integers
+  if (parsedValues.some((n) => !Number.isInteger(n)))   throw new Error("Los valores deben ser números enteros") 
+  
+  return {  num1: parsedValues[0], num2: parsedValues[1] }  
 }
 
 module.exports = { validateIntegers } 
