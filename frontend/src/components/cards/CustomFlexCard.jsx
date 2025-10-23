@@ -13,7 +13,7 @@ const CustomFlexCard = ({ children, sx }) => {
         justifyContent: "center",
         alignItems: "center",
         padding: "25px",
-        gap: "25px",
+        gap: "15px",
         border: `2px solid ${colors.border}`,
         borderRadius: "1rem",
         background: colors.secondary,

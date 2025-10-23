@@ -1,37 +1,42 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useCalculateMutation } from "./services/calculateApi";
 
 import { selectResult, setResult } from "./slices/calculateSlices";
 
+import { Box } from "@mui/material";
+
+import { ErrorMessage, Field, Form, Formik } from "formik";
+
+import { calculatorSchema } from "./utils/validationSchema";
+
+import {
+  FormErrorMessage,
+  H3,
+  H4,
+  H6,
+} from "./components/text/CustomTypography";
+
+import colors from "./theme/colors";
+
 import CalculatorContainer from "./containers/CalculatorContainer";
 import CustomFlexCard from "./components/cards/CustomFlexCard";
 import CustomButton from "./components/buttons/CustomButton";
 import CustomIconButton from "./components/buttons/CustomIconButton";
 import CustomNumberInput from "./components/inputs/CustomNumberInput";
-import colors from "./theme/colors";
+import FormFlexBox from "./components/form/FormFlexBox";
+import ResultBox from "./components/cards/ResultBoxCard";
 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CloseIcon from "@mui/icons-material/Close";
 import DivideIcon from "./components/icons/DivideIcon";
 
-import { Box } from "@mui/material";
-import CustomTypography, {
-  H3,
-  H4,
-  H6,
-} from "./components/text/CustomTypography";
-import { Field, Form, Formik } from "formik";
-import ResultBox from "./components/cards/ResultBoxCard";
-
 const App = () => {
   const dispatch = useDispatch();
 
   const result = useSelector(selectResult);
-
-  const [operation, setOperation] = useState(null);
 
   const [
     calculate,
@@ -51,16 +56,9 @@ const App = () => {
   ];
 
   // Manejo de cálculo
-  const handleCalculate = (numbers) => {
-    const body = { operation, numbers };
-
-    if (!operation) {
-      alert("Es necesario seleccionar una operación");
-    } else if (numbers.num1 === "" || numbers.num2 === "") {
-      alert("Debes ingresar los números antes de una operación");
-    } else {
-      calculate(body);
-    }
+  const handleCalculate = (values) => {
+    const body = { operation: values.operation, numbers: values };
+    calculate(body);
   };
 
   useEffect(() => {
@@ -90,52 +88,67 @@ const App = () => {
           }}
         >
           <Formik
-            initialValues={{ num1: "", num2: "" }}
+            initialValues={{ num1: "", num2: "", operation: "" }}
+            validationSchema={calculatorSchema}
             onSubmit={(values) => handleCalculate(values)}
           >
-            {({ values, handleChange, handleBlur }) => (
+            {({ values, handleChange, handleBlur, setFieldValue }) => (
               <Form>
                 <CustomFlexCard>
                   <H3>CALCULATOR</H3>
+                  <FormFlexBox>
+                    <Field
+                      as={CustomNumberInput}
+                      id="num1"
+                      name="num1"
+                      placeholder="Ingrese el número 1"
+                      value={values.num1}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
 
-                  <Field
-                    as={CustomNumberInput}
-                    id="num1"
-                    name="num1"
-                    placeholder="Ingrese el número 1"
-                    value={values.num1}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
+                    <ErrorMessage name="num1" component={FormErrorMessage} />
+                  </FormFlexBox>
 
-                  <Field
-                    as={CustomNumberInput}
-                    id="num2"
-                    name="num2"
-                    placeholder="Ingrese el número 2"
-                    value={values.num2}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
+                  <FormFlexBox>
+                    <Field
+                      as={CustomNumberInput}
+                      id="num2"
+                      name="num2"
+                      placeholder="Ingrese el número 2"
+                      value={values.num2}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
 
-                  <Box sx={{ width: "100%", display: "flex", gap: "25px" }}>
-                    {operationList.map(({ icon: Icon, value }, index) => (
-                      <CustomIconButton
-                        key={index}
-                        icon={
-                          <Icon
-                            color={
-                              operation === "divide"
-                                ? colors.textPrimary
-                                : colors.textTertiary
-                            }
-                          />
-                        }
-                        onClick={() => setOperation(value)}
-                        active={operation === value}
-                      />
-                    ))}
-                  </Box>
+                    <ErrorMessage name="num2" component={FormErrorMessage} />
+                  </FormFlexBox>
+
+                  <FormFlexBox>
+                    <Box sx={{ width: "100%", display: "flex", gap: "25px" }}>
+                      {operationList.map(({ icon: Icon, value }, index) => (
+                        <CustomIconButton
+                          key={index}
+                          icon={
+                            <Icon
+                              color={
+                                values.operation === "divide"
+                                  ? colors.textPrimary
+                                  : colors.textTertiary
+                              }
+                            />
+                          }
+                          onClick={() => setFieldValue("operation", value)}
+                          active={values.operation === value}
+                        />
+                      ))}
+                    </Box>
+
+                    <ErrorMessage
+                      name="operation"
+                      component={FormErrorMessage}
+                    />
+                  </FormFlexBox>
 
                   <CustomButton type="submit">CALCULAR</CustomButton>
 

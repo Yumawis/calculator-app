@@ -1,4 +1,5 @@
 import { Box } from "@mui/material";
+
 import colors from "../../theme/colors";
 
 const ResultBox = ({ children }) => {

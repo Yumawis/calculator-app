@@ -1,4 +1,5 @@
 import { Typography } from "@mui/material";
+
 import colors from "../../theme/colors";
 
 const CustomTypography = ({
@@ -36,5 +37,14 @@ export const H4 = (props) => (
 export const H6 = (props) => (
   <CustomTypography variant="h6" component="h6" {...props} />
 );
-
+export const FormErrorMessage = (props) => (
+  <CustomTypography
+    variant="overline"
+    sx={{
+      color: colors.error,
+      lineHeight: "15px",
+    }}
+    {...props}
+  />
+);
 export default CustomTypography;
